@@ -48,13 +48,13 @@ function Daily(dailyForecast){
 }
 
 //Search for data
-function searchLatToLng(query){
+function searchLatToLng(){
   const geoData = require('./data/geo.json');
   const location = new Location(geoData.results[0]);
   return location;
 }
 
-function searchWeather(query){{
+function searchWeather(){{
   let darkSkyData = require('./data/darksky.json');
   console.log(darkSkyData);
   let weatheArray = [];

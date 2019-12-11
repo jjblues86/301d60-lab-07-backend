@@ -1,0 +1,20 @@
+{
+  "name": "301d60-lab-07-backend",
+  "version": "1.0.0",
+  "description": "Number and name of feature: ________________________________",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjblues86/301d60-lab-07-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jjblues86/301d60-lab-07-backend/issues"
+  },
+  "homepage": "https://github.com/jjblues86/301d60-lab-07-backend#readme"
+}
