@@ -23,7 +23,7 @@ app.get('/weather', getWeather);
 
 //Handlers
 function getLocation(request, response){
-  return searchLatToLng(request.query.data)
+  return searchLatToLng(request.query.data || 'lynwood')
     .then(locationData => {
       response.send(locationData);
 
@@ -31,8 +31,12 @@ function getLocation(request, response){
 }
 
 function getWeather(request, response){
-  const weatherData = searchWeather(request.query.data || 'Lynnwood, WA, USA');
-  response.send(weatherData);
+
+  return searchWeather(request.query.data || 'Lynnwood, WA, USA')
+    .then(weatherData => {
+
+      response.send(weatherData);
+    })
 
 }
 
@@ -40,13 +44,11 @@ function getWeather(request, response){
 
 //Constructors
 function Location(location){
+
   this.formatted_query = location.formatted_address;
   this.latitude = location.geometry.location.lat;
   this.longitude = location.geometry.location.lng;
   this.long_name = location.address_components[0].long_name;
-  console.log('what?', this.formatted_query)
-
-  console.log('what?', this.long_name)
 
   // weatherLocations.push(this.latitude);
   // weatherLocations.push(this.longitude);
@@ -60,26 +62,33 @@ function Daily(dailyForecast){
 
 //Search for data
 function searchLatToLng(query){
-  const geoDataUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${process.env.GEOCODE_API_KEY}`
+  const geoDataUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${process.env.GEOCODING_API_KEY}`
   return superagent.get(geoDataUrl)
+
     .then(geoData => {
+      console.log('hey',geoData)
+
 
       const location = new Location(geoData.body.results[0]);
-      console.log('what', location)
+      console.log('what', geoData.body.results)
       return location;
     })
     .catch(err => console.error(err))
   // const geoData = require('./data/geo.json');
 }
 
-function searchWeather(){{
-  let darkSkyData = require('./data/darksky.json');
-  console.log(darkSkyData);
-  let weatheArray = [];
-  darkSkyData.daily.data.map(forecast => weatheArray.push(new Daily(forecast)));
-  console.log(weatheArray);
-  return weatheArray;
-}}
+function searchWeather(query){
+  const darkSkyDataUrl = `https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${query.latitude},${query.longitude}`
+  // let darkSkyData = require('./data/darksky.json');
+  return superagent.get(darkSkyDataUrl)
+    .then(weatherData => {
+
+      let weatheArray = [];
+      weatherData.body.daily.data.map(forecast => weatheArray.push(new Daily(forecast)));
+      console.log(weatheArray);
+      return weatheArray;
+    })
+}
 
 //Error handler
 app.get('/*', function(request, response){
