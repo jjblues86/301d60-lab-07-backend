@@ -82,6 +82,18 @@ function searchWeather(query) {
     })
 }
 
+function searchEvents(query) {
+  const eventBriteUrl = `http://api.eventful.com/json/events/search?location=${request.query.data.formatted_query}&app_key=${process.env.EVENTBRITE_API_KEY}`
+  return superagent.get(eventBriteUrl)
+    .then(eventData => {
+      console.log(eventData)
+      let eventArray = [];
+      eventData.body.daily.data.map(forcast =>
+        eventArray.push(new Daily(forcast)))
+      return eventArray
+    })
+}
+
 
 //Error handler
 app.get('/*', function (request, response) {
