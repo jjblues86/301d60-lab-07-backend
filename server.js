@@ -67,7 +67,7 @@ function Daily(dailyForecast){
 
 function Eventful(event){
   this.link = event.url;
-  this.name = event.venue_name;
+  this.name = event.title;
   this.event_date = event.start_time;
   this.summary = event.description;
 
@@ -112,7 +112,7 @@ function searchEvents(request, response){
       const jsonData = JSON.parse(eventData.text)
       const events = jsonData.events.event;
       let eventArray = [];
-      events.forEach(event => eventArray.push(new Eventful(event)));
+      events.map(event => eventArray.push(new Eventful(event)));
 
       response.send(eventArray);
       console.log('did', jsonData.events.event)
